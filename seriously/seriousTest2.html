@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+ <script type="text/javascript" src="./seriously.js"></script>
+ <script type="text/javascript" src="./effects/seriously.chroma.js"></script>
+ 
+<meta charset="utf-8">
+<title>Hello...</title>
+<style type="text/css">
+#mainContent {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: xx-large;
+	font-weight: bold;
+	background-color: #E3F0FB;
+	border-radius: 4px;
+	padding: 10px;
+	text-align: center;
+}
+.buttonStyle {
+	border-radius: 4px;
+	border: thin solid #F0E020;
+	padding: 5px;
+	background-color: #F8F094;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	color: #663300;
+	width: 75px;
+}
+
+.buttonStyle:hover {
+	border: thin solid #FFCC00;
+	background-color: #FCF9D6;
+	color: #996633;
+	cursor: pointer;
+}
+.buttonStyle:active {
+	border: thin solid #99CC00;
+	background-color: #F5FFD2;
+	color: #669900;
+	cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<div id="mainContent">
+<p id="helloText">?</p>
+<button id="clickButton" class="buttonStyle">click me</button>
+</div>
+<div><br><br></div>
+<div>
+  
+  <video id = "vid" height="480" width="640" controls preload="auto">
+  	<source src="../randomGreenScreen.mp4" type="video/mp4">
+  </video>
+  <canvas id="vidCan" height="480" width="640" style="background-image: url(../earthrise.jpg)"></canvas>
+   
+</div>
+
+<script>
+var seriously, colorbars, target;
+
+seriously = new Seriously(); 
+
+var chroma = seriously.effect("chroma");
+
+colorbars = seriously.source('#vid');
+
+target = seriously.target('#vidCan');
+
+
+chroma.source = colorbars;
+target.source = chroma; 
+var r = 98/255;
+var g = 195/255;
+var b = 116/255;
+chroma.screen = [r,g,b, 1];
+
+seriously.go();
+
+var myButton = document.getElementById("clickButton");
+var myText = document.getElementById("helloText");
+
+myButton.addEventListener('click', doSomething, false);
+var video = document.getElementById("vid");
+function doSomething() {
+	myText.textContent = "Serious Chroma key test part 2!";
+	video.play();
+}
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

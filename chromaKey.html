@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" />
+
+ <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+ <script type="text/javascript" src="seriously/seriously.js"></script>
+ <script type="text/javascript" src="seriously/effects/seriously.chroma.js"></script>
+ 
+<meta charset="utf-8">
+<title>Hello...</title>
+<style type="text/css">
+    #ffVid {
+        
+        object-fit: cover;
+        
+    }
+    .jumbotron {
+        
+        align-content: center;
+        
+    }
+    
+</style>
+</head>
+
+<body>
+
+<div id="app">
+    
+    <div class="jumbotron" align="center">
+        <button class="btn btn-success btn-lg" @click="runDemo()">Play Demo</button>
+        <button class="btn btn-danger btn-lg" @click="pauseDemo()">Pause</button>
+        <button class="btn btn-danger btn-lg" @click="resetDemo()">Reload Demo</button>
+        <button class='btn btn-info btn-lg' @click="swapDemo()">Swap Demo</button>
+        <div>
+           <h2 style= "display: inline">FFMPEG: </h2>
+           <h3 style= "display: inline">Similarity</h3>
+           <input @keyup="FFrender()" @mouseup="FFrender()" type="number" min="1" max="9" value="3"  v-model="FFsimilarity" >
+           <h3 style= "display: inline">Blend</h3>
+           <input @keyup="FFrender()" @mouseup="FFrender()" type="number" min="1" max="9" value="2"  v-model="FFblend">
+        </div>
+        <div>
+           <h2 style= "display: inline">SeriouslyJs: </h2>
+           <h3 style= "display: inline">Weight</h3>
+           <input @keyup="sRender()" @mouseup="sRender()" type="number" min="0" max="10" value="10"  v-model="weight" >
+           <h3 style= "display: inline">Balance</h3>
+           <input @keyup="sRender()" @mouseup="sRender()" type="number" min="0" max="10" value="10"  v-model="balance">
+           <h3 style= "display: inline">clipBlack</h3>
+           <input @keyup="sRender()" @mouseup="sRender()" type="number" min="0" max="10" value="0"  v-model="clipBlack" >
+           <h3 style= "display: inline">clipWhite</h3>
+           <input @keyup="sRender()" @mouseup="sRender()" type="number" min="0" max="10" value="10"  v-model="clipWhite">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>SeriouslyJS:</h1>
+                  <canvas id="sVid" ref="vidCan" height="720" width="1000" style="background-image: url(./road.jpg)"></canvas> 
+            </div>
+            <div class="col-sm-6">
+                <h1>FFMPEG:</h1>
+                <video ref = "ffVid" id = "ffVid" height="720" width="1000">
+                    <source :src="FFvideo" type="video/mp4">
+                 </video>
+           </div>
+        </div>
+    </div>
+    
+     <video id = "vid" ref = "vid" height="480" width="640" controls preload="auto" style="display: none">
+         
+    <source :src="sVideo" type="video/mp4">
+    
+     </video>
+</div>
+    
+</div>
+
+<script>
+
+
+
+new Vue({
+    
+    el: '#app',
+    
+    data: {
+        
+        sVideo: './shia.mp4',
+        FFvideo: './shia.mp4',
+        FFblend: '1',
+        FFsimilarity: '1',
+        balance: '10',
+        weight: '10',
+        clipBlack: '0',
+        clipWhite: '10',
+        swapCounter: 0,
+        seriously: '',
+        colorbars: '',
+        target: '',
+        chroma: '',
+        
+        vidSelect: {
+            
+            sref: document.getElementById("vid"),
+            fref: document.getElementById("ffVid"),
+            cref: document.getElementById("sVid")
+        }
+        
+    },
+    
+    methods: {
+        
+        runDemo: function(){
+            
+            var ffvideo = document.getElementById("ffVid");
+            var svideo  = document.getElementById("vid");
+            
+            ffvideo.play();
+            svideo.play();
+            
+            // this.vidSelect.forEach(function(element){
+            //     console.log(element);
+            //     element.play();
+            // });
+            
+        },
+        
+        pauseDemo: function() {
+            
+            var ffvideo = document.getElementById("ffVid");
+            var svideo  = document.getElementById("vid");
+            
+            ffvideo.pause();
+            svideo.pause();
+            console.log(this.FFvideo);
+            
+            //  this.vidSelect.forEach(function(vid){
+            //     vid.pause();
+            // });
+            
+        },
+        
+        FFrender: function() {
+            
+            if (this.swapCounter % 2 == 0) {
+            
+                this.FFvideo = "./shiaOut/shia" + this.FFsimilarity + this.FFblend + ".mp4"; 
+            
+            }
+            else {
+                
+                this.FFvideo = "./girlOut/girl" + this.FFsimilarity + this.FFblend + ".mp4";
+                
+            }
+
+            
+        },
+        
+        resetDemo: function() {
+            
+            var ffvideo = document.getElementById("ffVid");
+            var svideo  = document.getElementById("vid");
+            
+            ffvideo.pause();
+            svideo.pause();
+            ffvideo.load();
+            svideo.load();
+            ffvideo.play();
+            svideo.play();
+            
+            
+        },
+        
+         swapDemo: function() {
+            
+            this.swapCounter++;  
+            
+            if (this.swapCounter % 2 == 0) {
+                
+                this.FFvideo = "./shia.mp4";
+                this.sVideo = "./shia.mp4";
+               
+            }
+            
+            else {
+                
+                this.FFvideo = "./girl.mp4";
+                this.sVideo = "./girl.mp4"; 
+                
+            }
+            
+            var ffvideo = document.getElementById("ffVid");
+            var svideo  = document.getElementById("vid");
+            
+            ffvideo.pause();
+            svideo.pause();
+            ffvideo.load();
+            svideo.load();
+            ffvideo.play();
+            svideo.play();
+            
+        },
+        
+        sRender: function() {
+            
+            chroma.weight = this.weight/10;
+            chroma.balance = this. balance/10;
+            chroma.clipWhite = this.clipWhite/10;
+            chroma.clipBlack = this.clipBlack/10;
+            
+        }
+        
+        
+    },
+    
+    // mounted: function() {
+        
+
+    //     this.seriously = new Seriously(); 
+        
+    //     this.chroma = this.seriously.effect("chroma");
+        
+    //     this.colorbars = this.seriously.source(this.vidSelect.sref);
+    //     console.log( this.colorbars );
+    //     console.log( this.FFblend );
+        
+    //     this.target = this.seriously.target(this.vidSelect.cref);
+        
+        
+    //     this.source = this.colorbars;
+    //     this.target.source = this.chroma; 
+    //     var r = 98/255;
+    //     var g = 195/255;
+    //     var b = 116/255;
+    //     this.chroma.screen = [r,g,b, 1];
+        
+    //     this.seriously.go();
+        
+    // }
+
+});
+
+
+var seriously, colorbars, target;
+
+seriously = new Seriously(); 
+
+var chroma = seriously.effect("chroma");
+
+colorbars = seriously.source('#vid');
+
+target = seriously.target('#sVid');
+
+
+chroma.source = colorbars;
+target.source = chroma; 
+var r = 98/255;
+var g = 195/255;
+var b = 116/255;
+chroma.screen = [r,g,b, 1];
+
+seriously.go();
+
+
+</script>
+
+</body>
+</html>
